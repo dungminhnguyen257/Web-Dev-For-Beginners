@@ -20,14 +20,31 @@ function dragElement(terrariumElement) {
     pos3 = 0,
     pos4 = 0;
   terrariumElement.onpointerdown = pointerDrag;
-  //keep track of the plants's coordinates when they are moved
+  //keep track of the plant's coordinates when it's moved
   function pointerDrag(e) {
     e.preventDefault();
     console.log(e);
     pos3 = e.clientX;
     pos4 = e.clientY;
-    //indicate the plants to be moved and stoped with the pointer
+    //indicate the plant to be moved and stoped with the pointer
     document.onpointermove = elementDrag;
     document.onpointerup = stopElementDrag;
+    //edit initial positions 1-4 by recalculating them with X and Y cordinates from the previous step
+    //manupilate css style of the plant base on the calculation of their current and initial positions
+    function elementDrag(e) {
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      console.log(pos1, pos2, pos3, pos4);
+      terrariumElement.style.top = terrariumElement.offsetTop - pos2 + "px";
+      terrariumElement.style.left = terrariumElement.offsetLeft - pos1 + "px";
+    }
+    //reset onpointerup and onpointermove events so the current plant can be dragged again or
+    //another plant can be ready to be dragged
+    function stopElementDrag() {
+      document.onpointerup = null;
+      document.onpointermove = null;
+    }
   }
 }
